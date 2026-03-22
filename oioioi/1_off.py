@@ -21,7 +21,7 @@ def find_dominations(T):
         first_count = 0
 
         while i < q and j < r:
-            if T[idx[i]] <= T[idx[j]]:
+            if T[idx[i]] < T[idx[j]]:
                 temp[k] = idx[i]
                 first_count += 1
                 i += 1
