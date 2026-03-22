@@ -2,16 +2,16 @@ import sys
 from random import randint, seed
 
 
-OIOIOI = True 
+OIOIOI = False 
 
 
 def find_dominations(T):
     n = len(T)
 
     idx = list(range(n))
-    temp = [0 for _ in range(n)]
+    temp = [0] * n
     
-    dominations = [0 for _ in range(n)]
+    dominations = [0] * n
 
     def merge(p, q, r):
         i = p
@@ -36,14 +36,10 @@ def find_dominations(T):
             i += 1
             k += 1
 
-        while j < r:
-            temp[k] = idx[j]
-            dominations[idx[j]] += first_count
-            j += 1
-            k += 1
+        for i in range(j, r):
+            dominations[idx[i]] += first_count
 
-        for i in range(p, r):
-            idx[i] = temp[i]
+        idx[p:j] = temp[p:j]
 
     def merge_sort(p, r):
         if r - p > 1:
