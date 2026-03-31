@@ -2,6 +2,9 @@ import random
 
 
 def select_pivot(A, p, r):
+    if r - p <= 3:
+        return p
+
     a = p
     b = (p+r) // 2
     c = r
@@ -26,23 +29,30 @@ def partition(A, p, r):
     pivot_idx = select_pivot(A, p, r)
     pivot = A[pivot_idx]
 
+    # move pivot to end
     A[r], A[pivot_idx] = A[pivot_idx], A[r]
 
-    i = p # next index for first part
+    i = p
+    j = r - 1
 
-    for j in range(p, r): # working index
-        if A[j] <= pivot:
+    while i <= j:
+        if A[i] > pivot and A[j] < pivot:
             A[i], A[j] = A[j], A[i]
+
+        if A[i] <= pivot:
             i += 1
 
+        if A[j] >= pivot:
+            j -= 1
+
+    # move pivot to correct index
     A[r], A[i] = A[i], A[r]
-    
+
     return i
 
 
 def qsort(A, p, r):
     if p < r:
-        print(f"SORT [{p}, {r}]")
         q = partition(A, p, r)
         qsort(A, p, q-1)
         qsort(A, q+1, r)
@@ -53,7 +63,7 @@ def quick_sort(A):
 
 
 def main():
-    A = random.choices(range(100), k=20)
+    A = random.choices(range(100), k=40)
     print(A)
 
     quick_sort(A)
