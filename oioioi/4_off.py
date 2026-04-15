@@ -32,10 +32,9 @@ def main():
         parents[node] = parent
 
         for child, cost in edges[node]:
-            child_full_cost = full_cost * cost
-            q.put((child_full_cost, child, node))
-    
-    
+            if not visited[child]:
+                child_full_cost = full_cost * cost
+                q.put((child_full_cost, child, node))    
 
     for _ in range(k):
         target = int(sys.stdin.readline().strip())
