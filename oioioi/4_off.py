@@ -9,7 +9,6 @@ def main():
 
     parents = [None for _ in range(n+1)]
     min_costs = [float("inf") for _ in range(n+1)]
-    path_lens = [float("inf") for _ in range(n+1)]
     visited = [False for _ in range(n+1)]
 
     for _  in range(m):
