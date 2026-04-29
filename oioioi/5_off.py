@@ -1,7 +1,39 @@
 import sys
 
 
-def dfs(G, max_diff, start, end) -> bool:
+class UnionFind:
+    def __init__(self, N):
+        self.N = N
+        self.parent = [n for n in range(N)]
+        self.rank = [0 for _ in range(N)]
+    
+    def union(self, a, b):
+        a = self.find(a)
+        b = self.find(b)
+
+        if a == b:
+            return False
+        
+        if self.rank[a] < self.rank[b]:
+            self.parent[a] = b
+        else:
+            self.parent[b] = a
+            if self.rank[a] == self.rank[b]:
+                self.rank[a] += 1
+
+    def find(self, a):
+        if a == self.parent[a]:
+            return a
+        
+        self.parent[a] = self.find(self.parent[a])
+
+        return self.parent[a]
+    
+    def in_union(self, a, b):
+        return self.find(a) == self.find(b)
+    
+
+def dfs(G, max_diff, start, end, cache) -> bool:
     visited = [False for _ in range(len(G))]
 
     def visit(i, min_val_inh = None, max_val_inh = None):
@@ -30,8 +62,14 @@ def dfs(G, max_diff, start, end) -> bool:
                     
         visited[i] = False
 
+        if found:
+            cache[end].add(start)
+
         return found
     
+    if start in cache[end]:
+        return True
+
     return visit(start)
 
 
@@ -45,10 +83,12 @@ def main():
         G[a].append((b, c))
         G[b].append((a, c))
 
+    cache = [set() for _ in range(n+1)]  # cache[n] = set of items the n-th item is reachable from
+
     for _ in range(q):
         v, u = map(int, sys.stdin.readline().strip().split())
 
-        if dfs(G, d, v, u):
+        if dfs(G, d, v, u, cache):
             print("TAK")
         else:
             print("NIE")
