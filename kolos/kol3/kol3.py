@@ -8,45 +8,38 @@
 from kol3_test import runtests
 
 
-def compatible(s1, e1, s2, e2):
-    return e1 < s2 or e2 < s1
-
-
 def transactions(M, T):
     n = len(T)
 
-    timesteps = set()
+    timestamps = set()
     for s, e, _, _ in T:
-        timesteps.add(s)
-        timesteps.add(e)
-    timesteps = sorted(timesteps)
+        timestamps.add(s)
+        timestamps.add(e)
+    timestamps = sorted(timestamps)
 
-    time_to_step = {}
-    for i, t in enumerate(timesteps):
-        time_to_step[t] = i
+    time2timestamp = {t: i+1 for i, t in enumerate(timestamps)}
 
-    m = len(timesteps)
+    m = len(timestamps)
 
-    T = [(time_to_step[s], time_to_step[e], p, q) for s, e, p, q in T]
-    T.sort(key=lambda t: t[0])
+    T = [(time2timestamp[s], time2timestamp[e], p, q) for s, e, p, q in T]
+    T.sort(key=lambda t: t[1])
 
-    F = [[0 for _ in range(n+1)] for _ in range(m+1)]  # F[i][j] = maksymalna kwota biorąc pod uwagę pierwsze j przedmiotów, zajmując i sekund
+    F = [[M for _ in range(m+1)] for _ in range(n+1)]  # F[i][j] = maksymalna posiadana kwota biorąc pod uwagę pierwsze i przedmiotów, zajmując j sekund
 
-    for i in range(n+1):
-        F[i][0] = M
-
-    for i in range(m+1):
-        F[0][i] = M
-    
     for i in range(1, n+1):
-        for j in range(1, m+1):
+        for t in range(1, m+1):
+            value_if_not_taken = F[i-1][t]
 
-            if 
+            s, e, p, q = T[i-1]
+
+            if F[i-1][s-1] >= p and t >= e:  # jeśli mamy na tyle pieniędzy, żeby wykonać transakcję i zmieścimy się w naszym czasie
+                value_if_taken = F[i-1][s-1] - p + q
+            else:
+                value_if_taken = 0
+            
+            F[i][t] = max(value_if_not_taken, value_if_taken)
     
+    return F[n][m]
 
 
-
-
-
-
-runtests( transactions, all_tests = False)
+runtests( transactions, all_tests = True)
