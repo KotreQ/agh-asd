@@ -25,6 +25,7 @@ def sale_i_egzaminy(E):
         timestamps.add(s)
         timestamps.add(e)
     
+    timestamps.add(0)
     timestamps = sorted(timestamps)
     time2timestamp = {t: i+1 for i, t in enumerate(timestamps)}
 
