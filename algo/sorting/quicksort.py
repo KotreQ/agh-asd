@@ -1,7 +1,7 @@
 import random
 
 
-def select_pivot(A, p, r):
+def select_pivot(A, p, r):  # median of three
     if r - p <= 3:
         return p
 
@@ -23,6 +23,10 @@ def select_pivot(A, p, r):
             return b
         else:
             return c
+
+
+# def select_pivot(A, p, r):  # random pivot
+#     return random.randint(p, r)
 
 
 def partition(A, p, r):
